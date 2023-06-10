@@ -4,10 +4,13 @@
 \alias{extract_info}
 \title{Helper function to extract useful information}
 \usage{
-extract_info(dat)
+extract_info(dat, nT = 205)
 }
 \arguments{
-\item{dat}{Output from \code{load_dat}}
+\item{dat}{the output from \code{load_dat}.}
+
+\item{nT}{This function internally calls \code{create_eegmat}.
+See documentations for \code{create_eegmat}. \code{help(create_eegmat)}}
 }
 \value{
 A list
