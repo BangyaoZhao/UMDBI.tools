@@ -1,6 +1,6 @@
 test_that("multiplication works", {
   n_test = 3
-  folder = '../../../K_Protocol'
+  folder = '../../../Data/K_Protocol'
   all_files = list.files(folder)
   if (length(all_files) < n_test) {
     test_files = list()
