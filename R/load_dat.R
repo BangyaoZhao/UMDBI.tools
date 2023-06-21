@@ -27,6 +27,8 @@ rename_fun = function(x) {
     for (i in 1:length(x)) {
       x[[i]] = rename_fun(x[[i]])
     }
+    attributes(x)$dimnames = NULL
+    attributes(x)$dim = NULL
     return(x)
   } else {
     return(x)
