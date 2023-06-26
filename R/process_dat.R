@@ -10,7 +10,7 @@
 #' }
 #' @export
 
-simplify = function(dat) {
+process_dat = function(dat) {
   newdat = list(
     signal = dat$Data$RawData$signal,
     states = lapply(dat$Data$RawData$states, as.vector),
