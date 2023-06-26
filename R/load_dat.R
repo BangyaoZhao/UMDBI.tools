@@ -8,7 +8,31 @@
 
 load_dat = function(file_path) {
   dat <- readMat(file_path)
-  return(rename_fun(dat))
+  dat <- rename_fun(dat)
+  # channel names may not be there
+  cond1 = length(dat$Data$RawData$parameters$ChannelNames$Value) == 0
+  cond2 = ncol(dat$Data$RawData$signal) == 16
+  if (cond1 & cond2) {
+    dat$Data$RawData$parameters$ChannelNames$Value = c(
+      'F3',
+      'Fz',
+      'F4',
+      'T7',
+      'C3',
+      'Cz',
+      'C4',
+      'T8',
+      'CP3',
+      'CP4',
+      'P3',
+      'Pz',
+      'P4',
+      'PO7',
+      'PO8',
+      'Oz'
+    )
+  }
+  return(dat)
 }
 
 rename_fun = function(x) {

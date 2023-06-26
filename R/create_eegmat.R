@@ -1,20 +1,19 @@
 #' Helper function to convert the long EEG matrix into a tabular form
 #'
-#' @param signal The long EEG signal matrix of dim # of time points by # channels.
-#' For example, `dat[["Data"]][["RawData"]][["signal"]]`.
-#' @param flash_loc Locations of flashes corresponding to row indexes in `signal`.
-#' @param nT How many time points to extract after each flash.
-#' @returns A `length(flash_loc)` by `nT` EEG matrix.
+#' @param signal The long EEG signal matrix.
+#' @param flash_loc Locations to extract EEG segments.
+#' @param nT How many time points to extract.
+#' @param downrate Downsampling rate.
+#' @returns A `length(flash_loc)` by `nT * ncol(signal)` EEG matrix.
 #'
 #' @export
 
-
-create_eegmat = function(signal, flash_loc, nT = 205) {
-  indi = as.vector(outer(0:(nT - 1), flash_loc, '+'))
-  nflash = length(flash_loc)
-  mat = sapply(flash_loc, function(i) {
-    as.vector(signal[i:(i + nT - 1),])
+create_eegmat = function(signal, flash_loc, nT = 205, downrate = 1) {
+  eeglst = list()
+  indi = (0:(nT - 1))*downrate
+  eeglst = lapply(flash_loc, function(i) {
+    return(as.vector(signal[i+indi,]))
   })
-  mat = t(mat)
-  return(mat)
+  eegmat = do.call(rbind, eeglst)
+  return(eegmat)
 }

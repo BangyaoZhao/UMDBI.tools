@@ -4,18 +4,19 @@
 \alias{create_eegmat}
 \title{Helper function to convert the long EEG matrix into a tabular form}
 \usage{
-create_eegmat(signal, flash_loc, nT = 205)
+create_eegmat(signal, flash_loc, nT = 205, downrate = 1)
 }
 \arguments{
-\item{signal}{The long EEG signal matrix of dim # of time points by # channels.
-For example, \code{dat[["Data"]][["RawData"]][["signal"]]}.}
+\item{signal}{The long EEG signal matrix.}
 
-\item{flash_loc}{Locations of flashes corresponding to row indexes in \code{signal}.}
+\item{flash_loc}{Locations to extract EEG segments.}
 
-\item{nT}{How many time points to extract after each flash.}
+\item{nT}{How many time points to extract.}
+
+\item{downrate}{Downsampling rate.}
 }
 \value{
-A \code{length(flash_loc)} by \code{nT} EEG matrix.
+A \code{length(flash_loc)} by \code{nT * ncol(signal)} EEG matrix.
 }
 \description{
 Helper function to convert the long EEG matrix into a tabular form
