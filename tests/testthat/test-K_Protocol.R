@@ -9,7 +9,7 @@ test_that("K protocol", {
   }
   for (file_name in test_files) {
     dat = load_dat(paste(folder, file_name, sep = '/'))
-    datnew = simplify(dat)
+    datnew = process_dat(dat)
     expect_equal(ncol(datnew$signal), length(datnew$additional_info$channel_names))
     expect_false(all(datnew$states$StimulusType == 0))
   }
