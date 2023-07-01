@@ -16,9 +16,13 @@ process_dat = function(dat) {
     states = lapply(dat$Data$RawData$states, as.vector),
     additional_info = list(
       channel_names = dat$Data$RawData$parameters$ChannelNames$Value,
-      freq = dat[["Data"]][["RawData"]][["parameters"]][["SamplingRate"]][["NumericValue"]]
+      freq = as.numeric(dat[["Data"]][["RawData"]][["parameters"]][["SamplingRate"]][["NumericValue"]]),
+      total_samples = nrow(dat$Data$RawData$signal)
     )
   )
+  colnames(newdat$signal) = newdat$additional_info$channel_names
+  newdat$states$RunTime = 0:(newdat$additional_info$total_samples-1)
+  newdat$states$RunTime = newdat$states$RunTime/newdat$additional_info$freq
   # sometimes in K protocol StimulusType is stored else where
   if (all(newdat$states$StimulusType == 0)) {
     candidate1 = dat$Data$DBIData$DBI.EXP.Info$Stimulus.Type
@@ -52,5 +56,12 @@ process_dat = function(dat) {
   locs <- which(x[-1] == 1 & x[-length(x)] == 0) + 1
   locs <- locs[newdat$states$TrialNR[locs] != 0]
   newdat$additional_info$stimulus_locs = locs
+  # The keyboard for the K protocol
+  if (!is.null(dat$GUIspecific$matrix)) {
+    keyboard = apply(dat$GUIspecific$matrix, 1, function(x)
+      as.character(x[[1]]))
+    newdat$additional_info$keyboard =
+      t(matrix(keyboard, 6, 6))
+  }
   return(newdat)
 }

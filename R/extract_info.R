@@ -15,7 +15,6 @@
 #' if one character has four sequences, then `nfpc = 48`, because
 #' each sequence has 12 flashes}
 #' }
-#' @export
 #' @importFrom utils tail
 
 extract_info = function(dat, nT = 205) {
