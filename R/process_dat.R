@@ -21,8 +21,8 @@ process_dat = function(dat) {
     )
   )
   colnames(newdat$signal) = newdat$additional_info$channel_names
-  newdat$states$RunTime = 0:(newdat$additional_info$total_samples-1)
-  newdat$states$RunTime = newdat$states$RunTime/newdat$additional_info$freq
+  newdat$states$RunTime = 0:(newdat$additional_info$total_samples - 1)
+  newdat$states$RunTime = newdat$states$RunTime / newdat$additional_info$freq
   # sometimes in K protocol StimulusType is stored else where
   if (all(newdat$states$StimulusType == 0)) {
     candidate1 = dat$Data$DBIData$DBI.EXP.Info$Stimulus.Type
@@ -63,5 +63,9 @@ process_dat = function(dat) {
     newdat$additional_info$keyboard =
       t(matrix(keyboard, 6, 6))
   }
+  # add flashes
+  newdat$flashes = lapply(newdat$states, function(x) {
+    x[newdat$additional_info$stimulus_locs]
+  })
   return(newdat)
 }
