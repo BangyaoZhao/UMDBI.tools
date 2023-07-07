@@ -67,5 +67,40 @@ process_dat = function(dat) {
   newdat$flashes = lapply(newdat$states, function(x) {
     x[newdat$additional_info$stimulus_locs]
   })
+  newdat$flashes$stimulus_locs = newdat$additional_info$stimulus_locs
+  # add demographic vars
+  demo = dat[["Data"]][["DBIData"]][["Subject_Info"]][["Demog_Survey"]]
+  if (is.null(demo)) {
+    demo = dat[["Data"]][["DBIData"]][["Subject.Info"]][["Demog.Survey"]]
+  }
+  options = dat[["Data"]][["Options"]]
+  ops1 = dat[["Data"]][["Options"]][["Diagnosis_Struct"]]
+  if (is.null(ops1)) {
+    ops1 = dat[["Data"]][["Options"]][["Diagnosis.Struct"]]
+  }
+  key1 = dat[["Data"]][["DBIData"]][["Subject_Info"]][["Diagnosis"]]
+  if (is.null(key1)) {
+    key1 = dat[["Data"]][["DBIData"]][["Subject.Info"]][["Diagnosis"]]
+  }
+  demog = list(Age = as.numeric(demo$Age))
+  for (x in c(names(demo), "Diagnosis")) {
+    if (x %in% names(options)) {
+      ops = options[[x]]
+      key = demo[[x]]
+    } else if (x == "Diagnosis") {
+      ops = ops1
+      key = key1
+    } else {
+      next
+    }
+    if (is.list(key)) {
+      next
+    }
+    selected = sapply(ops, function(val) {
+      val == key
+    })
+    demog[[x]] = names(which(selected))
+  }
+  newdat$additional_info$demog = demog
   return(newdat)
 }

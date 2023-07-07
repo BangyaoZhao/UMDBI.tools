@@ -6,5 +6,7 @@ test_that("U Protocol", {
     datnew = process_dat(dat)
     expect_equal(ncol(datnew$signal), length(datnew$additional_info$channel_names))
     expect_false(all(datnew$states$StimulusType == 0))
+    signal_bp = apply_bandpass_filter(datnew$signal)
+    expect_equal(dim(signal_bp), dim(datnew$signal))
   }
 })
